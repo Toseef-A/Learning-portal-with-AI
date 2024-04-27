@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Story maker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            background-image: url('https://i.pinimg.com/originals/ef/7f/b1/ef7fb1b37078b6a2aef8e40710446bfa.jpg');
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            text-align: center;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .options {
+            display: none;
+            margin-top: 20px;
+        }
+        .options button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .options button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div id="chatbox">
+        <h1>Generate a Story About a Topic!</h1>
+        <input type="text" id="userInput" placeholder="Topic, Book, Link..." style="margin-bottom: 10px;">
+        <button onclick="sendQuery()">Send</button>
+        <button id="backToPortal">Back to Home Page</button>
+        <div style="padding: 10px;"></div>
+    </div>
+    <div id="response"></div>
+
+    <script>
+        async function sendQuery() {
+            const userInput = "Write me a 10 line story about " + document.getElementById("userInput").value;
+            const response = await fetch('/query', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ query: userInput })
+            });
+            const data = await response.json();
+            document.getElementById("response").innerHTML = data.response;
+        }
+
+        // JavaScript to handle button click event
+        document.getElementById("backToPortal").addEventListener("click", function() {
+            window.location.href = "Home.html"; // Navigate to the Home page
+        });
+
+    </script>
+    </div>
+</body>
+</html>
+
