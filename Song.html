@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Song Generator</title>
+    <style>
+        button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://i.pinimg.com/originals/ef/7f/b1/ef7fb1b37078b6a2aef8e40710446bfa.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .options {
+            text-align: center;
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .options button {
+            width: calc(25% - 20px); /* 25% width for each button with margin */
+            margin: 10px; /* Margin around each button */
+            padding: 40px; /* Increase padding to make the buttons bigger */
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .options button:hover {
+            background-color: #45a049;
+        }
+    
+    </style>
+</head>
+<body>
+    <div class="container">
+    <h1>Song Generator</h1>
+    <p>Enter lyrics for your song:</p>
+    <input type="text" id="lyricsInput">
+    <button onclick="generateLyrics()">Generate Song</button>
+    <button onclick="playSong()" style="background-color: #ff5722;">Play</button>
+    <button onclick="stopSong()" style="background-color: #f44336;">Stop</button>
+    <button id="backToPortal">Back to Home Page</button>
+
+    <!-- Lyrics display area -->
+    <div id="lyricsDisplay"></div>
+
+    <!-- YouTube player -->
+    <div id="player"></div>
+</div>
+
+    <script>
+        var speech;
+        var player;
+        var isPlayerReady = false;
+        var lyrics = "";
+
+        // JavaScript to handle button click event
+        document.getElementById("backToPortal").addEventListener("click", function() {
+            window.location.href = "Index.html"; // Navigate to the Index page
+        });
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '0',
+                width: '0',
+                videoId: 'PiHXN-tOKFA', // Replace VIDEO_ID with the ID of the YouTube video
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            isPlayerReady = true;
+            player.setVolume(50); // Set volume to 50% (half of the original volume)
+        }
+
+        function onPlayerStateChange(event) {
+            // You can handle player state changes here if needed
+        }
+
+        function generateLyrics() {
+            lyrics = document.getElementById("lyricsInput").value.trim();
+            var lyricsDisplay = document.getElementById("lyricsDisplay");
+            lyricsDisplay.innerHTML = "<p>" + lyrics + "</p>";
+        }
+
+        function playSong() {
+            var lyricsText = lyrics;
+
+            // Stop any ongoing speech synthesis
+            stopSong();
+
+            // Play YouTube video if player is ready
+            if (isPlayerReady) {
+                player.playVideo();
+            }
+
+            // Speak the lyrics using speech synthesis
+            speech = new SpeechSynthesisUtterance(lyricsText);
+            window.speechSynthesis.speak(speech);
+        }
+
+        function stopSong() {
+            // Stop any ongoing speech synthesis
+            if (speech) {
+                window.speechSynthesis.cancel();
+            }
+            // Pause YouTube video if player is ready
+            if (isPlayerReady) {
+                player.pauseVideo();
+            }
+        }
+    </script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+</body>
+</html>
