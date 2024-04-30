@@ -30,7 +30,7 @@ def ask_azure_gpt(prompt, client, model_name):
 
 @app.route('/')
 def index():
-    return render_template('Index.html')
+    return render_template('index.html')
 
 @app.route('/query', methods=['POST'])
 def handle_query():
